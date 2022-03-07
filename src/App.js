@@ -5,6 +5,9 @@ import FormularioCadastro from './components/FormularioCadastro/FormularioCadast
 import { Container, Typography } from '@mui/material'
 import '@fontsource/roboto'
 
+import { validaCPF, validaSenha } from './models/cadastro'
+import ValidacoesCadastro from './context/ValidacoesCadastro'
+
 class App extends Component {
     render() {
         return (
@@ -13,14 +16,19 @@ class App extends Component {
                     variant="h3"
                     component="h1"
                     align="center"
-                    sx={{ margin: 2 }}
+                    sx={{ m: 2 }}
                 >
                     Formulário de cadastro
                 </Typography>
-                <FormularioCadastro
-                    aoEnviar={aoEnviarForm}
-                    validarCPF={validaCPF}
-                />
+                <ValidacoesCadastro.Provider
+                    value={{
+                        cpf: validaCPF,
+                        senha: validaSenha,
+                        nome: validaSenha
+                    }}
+                >
+                    <FormularioCadastro aoEnviar={aoEnviarForm} />
+                </ValidacoesCadastro.Provider>
             </Container>
         )
     }
@@ -28,14 +36,6 @@ class App extends Component {
 
 function aoEnviarForm(dados) {
     console.log(dados)
-}
-
-function validaCPF(cpf) {
-    if (cpf.length !== 11) {
-        return { valido: false, texto: 'O CPF deve ter 11 digitos' }
-    } else {
-        return { valido: true, texto: '' }
-    }
 }
 
 export default App
